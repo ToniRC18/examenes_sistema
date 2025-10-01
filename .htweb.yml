@@ -1,0 +1,4 @@
+web:
+  document_root: webroot
+  index_files:
+    - index.php

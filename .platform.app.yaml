@@ -1,0 +1,28 @@
+name: examenes-sistema
+
+web:
+  document_root: webroot
+  locations:
+    /:
+      root: webroot
+      passthru: /index.php
+
+runtime:
+  extensions:
+    - pdo_mysql
+
+relationships:
+  database: "mysql:database"
+
+mounts:
+  "logs": "shared:files/logs"
+  "tmp": "shared:files/tmp"
+
+hooks:
+  build: |
+    set -eux
+    composer install --no-dev --optimize-autoloader
+  deploy: |
+    set -eux
+    php bin/cake migrations migrate --no-interaction
+    php bin/cake migrations seed --seed UsersSeed --no-interaction || true
